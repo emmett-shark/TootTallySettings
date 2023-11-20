@@ -2,7 +2,9 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using System.IO;
 using System.Net.Configuration;
+using TootTallyCore.Utils.Assets;
 using TootTallyCore.Utils.TootTallyModules;
 using UnityEngine;
 
@@ -45,6 +47,7 @@ namespace TootTallySettings
 
         public void LoadModule()
         {
+            AssetManager.LoadAssets(Path.Combine(Path.GetDirectoryName(Instance.Info.Location), "Assets"));
             _harmony.PatchAll(typeof(TootTallySettingsManager));
         }
 
