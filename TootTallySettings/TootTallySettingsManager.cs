@@ -19,14 +19,13 @@ namespace TootTallySettings
         private static GameObject _mainMenu, _mainSettingPanel, _settingPanelGridHolder;
         public static Transform GetSettingPanelGridHolderTransform { get => _settingPanelGridHolder.transform; }
         
-        private static List<TootTallySettingPage> _settingPageList;
+        private static List<TootTallySettingPage> _settingPageList = new List<TootTallySettingPage>();
         private static TootTallySettingPage _currentActivePage;
 
         [HarmonyPatch(typeof(GameObjectFactory), nameof(GameObjectFactory.OnHomeControllerInitialize))]
         [HarmonyPostfix]
         public static void InitializeTootTallySettingsManager(HomeController homeController)
         {
-            _settingPageList = new List<TootTallySettingPage>();
             _currentInstance = homeController;
 
             TootTallySettingObjectFactory.Initialize(_currentInstance);
@@ -145,6 +144,6 @@ namespace TootTallySettings
             TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, Vector2.zero, 1.5f, new SecondDegreeDynamicsAnimation(1.75f, 1f, 0f));
         }
 
-        public static TootTallySettingPage GetSettingPageByName(string name) => _settingPageList.Find(page => page.name == name);
+        public static TootTallySettingPage GetSettingPageByName(string name) => _settingPageList?.Find(page => page.name == name);
     }
 }
