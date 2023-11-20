@@ -22,15 +22,11 @@ namespace TootTallySettings
         private static List<TootTallySettingPage> _settingPageList;
         private static TootTallySettingPage _currentActivePage;
 
-        static TootTallySettingsManager()
-        {
-            _settingPageList = new List<TootTallySettingPage>();
-        }
-
         [HarmonyPatch(typeof(GameObjectFactory), nameof(GameObjectFactory.OnHomeControllerInitialize))]
         [HarmonyPostfix]
         public static void InitializeTootTallySettingsManager(HomeController homeController)
         {
+            _settingPageList = new List<TootTallySettingPage>();
             _currentInstance = homeController;
 
             TootTallySettingObjectFactory.Initialize(_currentInstance);
