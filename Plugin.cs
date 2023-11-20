@@ -1,87 +1,63 @@
 ﻿using BaboonAPI.Hooks.Initializer;
 using BepInEx;
 using BepInEx.Configuration;
-using BepInEx.Logging;
 using HarmonyLib;
-using System.IO;
-using TootTally.Utils;
-using TootTally.Utils.TootTallySettings;
+using System.Net.Configuration;
+using TootTallyCore.Utils.TootTallyModules;
 using UnityEngine;
 
-namespace TootTally.ModuleTemplate
+namespace TootTallySettings
 {
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
-    [BepInDependency("TootTally", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("TootTallyCore", BepInDependency.DependencyFlags.HardDependency)]
     public class Plugin : BaseUnityPlugin, ITootTallyModule
     {
         public static Plugin Instance;
+        private static Harmony _harmony;
 
-        private const string CONFIG_NAME = "ModuleTemplate.cfg";
-        public Options option;
         public ConfigEntry<bool> ModuleConfigEnabled { get; set; }
         public bool IsConfigInitialized { get; set; }
-        public string Name { get => PluginInfo.PLUGIN_NAME; set => Name = value; }
+        public string Name { get => "TootTally Settings"; set => Name = value; }
 
-        public ManualLogSource GetLogger => Logger;
-        public static TootTallySettingPage settingPage;
+        public static TootTallySettingPage ModulesSettingPage;
+        public static TootTallySettingPage MainTootTallySettingPage;
 
-        public void LogInfo(string msg) => Logger.LogInfo(msg);
-        public void LogError(string msg) => Logger.LogError(msg);
+        public static void LogInfo(string msg) => Instance.Logger.LogInfo(msg);
+        public static void LogError(string msg) => Instance.Logger.LogError(msg);
 
         private void Awake()
         {
             if (Instance != null) return;
             Instance = this;
-            
+            _harmony = new Harmony(Info.Metadata.GUID);
+
+
             GameInitializationEvent.Register(Info, TryInitialize);
         }
 
         private void TryInitialize()
         {
             // Bind to the TTModules Config for TootTally
-            ModuleConfigEnabled = TootTally.Plugin.Instance.Config.Bind("Modules", "ModuleTemplate", true, "<insert module description here>");
-            TootTally.Plugin.AddModule(this);
+            ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "<insert module description here>");
+            MainTootTallySettingPage = TootTallySettingsManager.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
+            TootTallyModuleManager.AddModule(this);
         }
 
         public void LoadModule()
         {
-            string configPath = Path.Combine(Paths.BepInExRootPath, "config/");
-            ConfigFile config = new ConfigFile(configPath + CONFIG_NAME, true);
-            option = new Options()
-            {
-                // Set your config here by binding them to the related ConfigEntry in your Options class
-                // Example:
-                // Unlimited = config.Bind(CONFIG_FIELD, "Unlimited", DEFAULT_UNLISETTING)
-            };
+            _harmony.PatchAll(typeof(TootTallySettingsManager));
+        }
 
-            settingPage = TootTallySettingsManager.AddNewPage("ModulePageName", "HeaderText", 40f, new Color(0,0,0,0));
-            if (settingPage != null) {
-                // Use TootTallySettingPage functions to add your objects to TootTallySetting
-                // Example:
-                // page.AddToggle(name, option.Unlimited);
-            }
-
-            Harmony.CreateAndPatchAll(typeof(ModuleTemplatePatches), PluginInfo.PLUGIN_GUID);
-            LogInfo($"Module loaded!");
+        public void AddModuleToSettingPage(ITootTallyModule module)
+        {
+            ModulesSettingPage ??= TootTallySettingsManager.AddNewPage("TTModules", "TTModules", 40f, new Color(0, 0, 0, 0));
+            ModulesSettingPage.AddToggle(module.Name, module.ModuleConfigEnabled);
         }
 
         public void UnloadModule()
         {
-            Harmony.UnpatchID(PluginInfo.PLUGIN_GUID);
-            settingPage.Remove();
+            _harmony.UnpatchSelf();
             LogInfo($"Module unloaded!");
-        }
-
-        public static class ModuleTemplatePatches
-        {
-            // Apply your Trombone Champ patches here
-        }
-
-        public class Options
-        {
-            // Fill this class up with ConfigEntry objects that define your configs
-            // Example:
-            // public ConfigEntry<bool> Unlimited { get; set; }
         }
     }
 }
