@@ -141,7 +141,7 @@ namespace TootTallySettings
 
         public BaseTootTallySettingObject GetSettingObjectByName(string name) => _settingObjectList.Find(obj => obj.name == name);
 
-        internal virtual void OnShow() { }
+        public virtual void OnShow() { }
 
         public void Show()
         {
@@ -157,7 +157,7 @@ namespace TootTallySettings
             _scrollableSliderHandler.enabled = gridPanel.GetComponent<RectTransform>().sizeDelta.y > -100f;
         }
 
-        internal virtual void OnHide() { }
+        public virtual void OnHide() { }
 
         public void Hide()
         {
