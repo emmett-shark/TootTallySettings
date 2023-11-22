@@ -38,8 +38,8 @@ namespace TootTallySettings.TootTallySettingsObjects
         public void ConfigureDropdownEnum()
         {
             dropdown.AddOptions(Enum.GetNames(_config.BoxedValue.GetType()).ToList());
-            dropdown.value = (int)_config.BoxedValue;
-            dropdown.onValueChanged.AddListener(value => { _config.BoxedValue = value; });
+            dropdown.value = dropdown.options.FindIndex(x => x.text == _config.BoxedValue.ToString());
+            dropdown.onValueChanged.AddListener(value => { _config.BoxedValue = Enum.Parse(_config.BoxedValue.GetType(), dropdown.options[value].text); });
         }
 
         public void ConfigureDropdownString()

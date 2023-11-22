@@ -3,7 +3,6 @@ using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using System.IO;
-using System.Net.Configuration;
 using TootTallyCore.Utils.Assets;
 using TootTallyCore.Utils.TootTallyModules;
 using UnityEngine;
