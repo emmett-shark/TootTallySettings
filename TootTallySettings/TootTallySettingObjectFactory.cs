@@ -147,10 +147,9 @@ namespace TootTallySettings
             var gridHolder = panel.transform.Find("SettingsPanelGridHolder").gameObject;
 
             var gridLayoutGroup = gridHolder.AddComponent<GridLayoutGroup>();
-            gridLayoutGroup.padding = new RectOffset(100, 100, 20, 20);
             gridLayoutGroup.spacing = new Vector2(25, 25);
-            gridLayoutGroup.childAlignment = TextAnchor.UpperLeft;
-            gridLayoutGroup.cellSize = new Vector2(250, 80);
+            gridLayoutGroup.childAlignment = TextAnchor.UpperCenter;
+            gridLayoutGroup.cellSize = new Vector2(400, 85);
 
             GameObjectFactory.CreateCustomButton(panel.transform, new Vector2(-50, -66), new Vector2(250, 80), "Back", "TTSettingsBackButton", TootTallySettingsManager.OnBackButtonClick);
 
