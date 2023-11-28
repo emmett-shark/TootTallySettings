@@ -2,6 +2,7 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using Mono.Cecil.Cil;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -44,7 +45,10 @@ namespace TootTallySettings
             ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "<insert module description here>");
             MainTootTallySettingPage = TootTallySettingsManager.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
 
-            var filePaths = Directory.GetFiles(Path.Combine(Paths.BepInExRootPath, "Themes"));
+            var path = Path.Combine(Paths.BepInExRootPath, "Themes");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+
+            var filePaths = Directory.GetFiles(path);
             List<string> fileNames = new List<string>();
             fileNames.AddRange(new string[] { "Day", "Night", "Random", "Default" });
             filePaths.ToList().ForEach(path => fileNames.Add(Path.GetFileNameWithoutExtension(path)));
