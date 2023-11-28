@@ -2,7 +2,10 @@
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using TootTallyCore;
 using TootTallyCore.Utils.Assets;
 using TootTallyCore.Utils.TootTallyModules;
 using UnityEngine;
@@ -32,7 +35,6 @@ namespace TootTallySettings
             Instance = this;
             _harmony = new Harmony(Info.Metadata.GUID);
 
-
             GameInitializationEvent.Register(Info, TryInitialize);
         }
 
@@ -41,6 +43,15 @@ namespace TootTallySettings
             // Bind to the TTModules Config for TootTally
             ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "<insert module description here>");
             MainTootTallySettingPage = TootTallySettingsManager.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
+
+            var filePaths = Directory.GetFiles(Path.Combine(Paths.BepInExRootPath, "Themes"));
+            List<string> fileNames = new List<string>();
+            fileNames.AddRange(new string[] { "Day", "Night", "Random", "Default" });
+            filePaths.ToList().ForEach(path => fileNames.Add(Path.GetFileNameWithoutExtension(path)));
+            MainTootTallySettingPage.AddLabel("GameThemesLabel", "Game Theme", 24f, TMPro.FontStyles.Normal, TMPro.TextAlignmentOptions.BottomLeft);
+            MainTootTallySettingPage.AddDropdown("Themes", TootTallyCore.Plugin.Instance.ThemeName, fileNames.ToArray()); //Have to fix dropdown default value not working
+            MainTootTallySettingPage.AddButton("ResetThemeButton", new Vector2(350, 50), "Refresh Theme", ThemeManager.RefreshTheme);
+
             TootTallyModuleManager.AddModule(this);
         }
 
