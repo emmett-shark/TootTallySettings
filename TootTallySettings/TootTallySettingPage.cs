@@ -9,6 +9,7 @@ using TootTallySettings.TootTallySettingsObjects;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Rewired.Data;
 
 namespace TootTallySettings
 {
@@ -24,20 +25,22 @@ namespace TootTallySettings
         public string name, headerName;
         public float elementSpacing;
         protected List<BaseTootTallySettingObject> _settingObjectList;
-        private GameObject _pageButton;
+        private CustomButton _pageButton;
         protected GameObject _fullPanel;
         protected CustomButton _backButton;
         protected Slider _verticalSlider;
         protected ScrollableSliderHandler _scrollableSliderHandler;
         public GameObject gridPanel;
         private Color _bgColor;
+        private ColorBlock _btnColors;
         private bool _isInitialized;
-        public TootTallySettingPage(string pageName, string headerName, float elementSpacing, Color bgColor)
+        public TootTallySettingPage(string pageName, string headerName, float elementSpacing, Color bgColor, ColorBlock btnColors)
         {
             this.name = pageName;
             this.headerName = headerName;
             this.elementSpacing = elementSpacing;
             _bgColor = bgColor;
+            _btnColors = btnColors;
             _settingObjectList = new List<BaseTootTallySettingObject>();
             if (TootTallySettingsManager.isInitialized)
                 Initialize();
@@ -56,7 +59,9 @@ namespace TootTallySettings
             _scrollableSliderHandler = _verticalSlider.gameObject.AddComponent<ScrollableSliderHandler>();
             _scrollableSliderHandler.enabled = false;
 
-            _pageButton = GameObjectFactory.CreateCustomButton(TootTallySettingsManager.GetSettingPanelGridHolderTransform, Vector2.zero, new Vector2(250, 60), name, $"Open{name}Button", () => TootTallySettingsManager.SwitchActivePage(this)).gameObject;
+            _pageButton = GameObjectFactory.CreateCustomButton(TootTallySettingsManager.GetSettingPanelGridHolderTransform, Vector2.zero, new Vector2(250, 60), name, $"Open{name}Button", () => TootTallySettingsManager.SwitchActivePage(this));
+            if (_btnColors != null)
+                _pageButton.button.colors = _btnColors;
             _settingObjectList.ForEach(obj =>
             {
                 try
@@ -83,7 +88,7 @@ namespace TootTallySettings
                 obj.Remove();
             });
             GameObject.DestroyImmediate(_fullPanel);
-            GameObject.DestroyImmediate(_pageButton);
+            GameObject.DestroyImmediate(_pageButton.gameObject);
         }
 
         public void RemoveSettingObjectFromList(string name)

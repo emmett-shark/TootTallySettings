@@ -79,7 +79,10 @@ namespace TootTallySettings
                 ReturnToMainMenu();
         }
 
-        public static TootTallySettingPage AddNewPage(string pageName, string headerText, float elementSpacing, Color bgColor)
+        public static TootTallySettingPage AddNewPage(string pageName, string headerText, float elementSpacing, Color bgColor) =>
+        AddNewPage(pageName, headerText, elementSpacing, bgColor, GetDefaultColorBlock);
+
+        public static TootTallySettingPage AddNewPage(string pageName, string headerText, float elementSpacing, Color bgColor, ColorBlock btnColor)
         {
             var page = GetSettingPageByName(pageName);
             if (page != null)
@@ -88,7 +91,7 @@ namespace TootTallySettings
                 return page;
             }
 
-            page = new TootTallySettingPage(pageName, headerText, elementSpacing, bgColor);
+            page = new TootTallySettingPage(pageName, headerText, elementSpacing, bgColor, btnColor);
             page.OnPageAdd();
             _settingPageList.Add(page);
 
@@ -145,5 +148,16 @@ namespace TootTallySettings
         }
 
         public static TootTallySettingPage GetSettingPageByName(string name) => _settingPageList?.Find(page => page.name == name);
+
+        private static ColorBlock GetDefaultColorBlock =>
+            new ColorBlock()
+            {
+                normalColor = new Color(.95f, .21f, .35f),
+                highlightedColor = new Color(.77f, .17f, .28f),
+                pressedColor = new Color(1,1,0),
+                selectedColor = new Color(.95f, .21f, .35f),
+                fadeDuration = .08f,
+                colorMultiplier = 1
+            };
     }
 }

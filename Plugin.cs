@@ -52,7 +52,7 @@ namespace TootTallySettings
 
         public void AddModuleToSettingPage(ITootTallyModule module)
         {
-            ModulesSettingPage ??= TootTallySettingsManager.AddNewPage("TTModules", "TTModules", 40f, new Color(0, 0, 0, 0));
+            ModulesSettingPage ??= TootTallySettingsManager.AddNewPage("Enable / Disable Modules", "TTModules", 40f, new Color(0, 0, 0, 0));
             ModulesSettingPage.AddToggle(module.Name, module.ModuleConfigEnabled);
         }
 
