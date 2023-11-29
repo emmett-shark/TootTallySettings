@@ -23,13 +23,6 @@ namespace TootTallySettings
         private static List<TootTallySettingPage> _settingPageList = new List<TootTallySettingPage>();
         private static TootTallySettingPage _currentActivePage;
 
-        [HarmonyPatch(typeof(TootTallyModuleManager), nameof(TootTallyModuleManager.LoadModules))]
-        [HarmonyPostfix]
-        public static void OnLoadModulesPostfixInitializeAllSettings()
-        {
-            Plugin.Instance.settingsEntryPoints.ForEach(entry => entry.InitializeSettings());
-        }
-
 
         [HarmonyPatch(typeof(GameObjectFactory), nameof(GameObjectFactory.OnHomeControllerInitialize))]
         [HarmonyPostfix]

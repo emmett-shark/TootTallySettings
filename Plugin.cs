@@ -3,7 +3,6 @@ using BaboonAPI.Hooks.Initializer;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using Mono.Cecil.Cil;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace TootTallySettings
 {
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     [BepInDependency("TootTallyCore", BepInDependency.DependencyFlags.HardDependency)]
-    public class Plugin : BaseUnityPlugin, ITootTallyModule, ITootTallyModuleManager
+    public class Plugin : BaseUnityPlugin, ITootTallyModule
     {
         public static Plugin Instance;
         private static Harmony _harmony;
@@ -31,8 +30,6 @@ namespace TootTallySettings
         public static void LogInfo(string msg) => Instance.Logger.LogInfo(msg);
         public static void LogError(string msg) => Instance.Logger.LogError(msg);
 
-        internal List<TootTallySettingsEntryPoints> settingsEntryPoints;
-
         private void Awake()
         {
             if (Instance != null) return;
@@ -45,9 +42,6 @@ namespace TootTallySettings
         private void TryInitialize()
         {
             // Bind to the TTModules Config for TootTally
-            settingsEntryPoints = Entrypoints.get<TootTallySettingsEntryPoints>().ToList();
-            Plugin.LogInfo($"{settingsEntryPoints.Count} toottallysettings entrypoints detected.");
-
             ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "<insert module description here>");
             MainTootTallySettingPage = TootTallySettingsManager.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
 
@@ -63,21 +57,11 @@ namespace TootTallySettings
             MainTootTallySettingPage.AddButton("ResetThemeButton", new Vector2(350, 50), "Refresh Theme", ThemeManager.RefreshTheme);
 
             TootTallyModuleManager.AddModule(this);
-
-      
         }
 
         public void LoadModule()
         {
             AssetManager.LoadAssets(Path.Combine(Path.GetDirectoryName(Instance.Info.Location), "Assets"));
-
-            settingsEntryPoints.ForEach(entry =>
-            {
-                entry.AddToModulePage(this);
-                entry.AddToTootTallyPage(MainTootTallySettingPage);
-                entry.InitializeSettings();
-            });
-
             _harmony.PatchAll(typeof(TootTallySettingsManager));
         }
 
