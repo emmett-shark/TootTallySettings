@@ -20,7 +20,7 @@ namespace TootTallySettings.TootTallySettingsObjects
         {
             _config = config;
             _optionValues = optionValues;
-            if (TootTallySettingsManager.isInitialized)
+            if (TootTallySettingsModule.isInitialized)
             {
                 Initialize();
             }
@@ -29,7 +29,7 @@ namespace TootTallySettings.TootTallySettingsObjects
         public TootTallySettingDropdown(TootTallySettingPage page, string name, ConfigEntryBase config) : base(name, page)
         {
             _config = config;
-            if (TootTallySettingsManager.isInitialized)
+            if (TootTallySettingsModule.isInitialized)
             {
                 Initialize();
             }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TootTallyCore;
+using TootTallyCore.Settings;
 using TootTallyCore.Utils.Assets;
 using TootTallyCore.Utils.TootTallyModules;
 using UnityEngine;
@@ -24,8 +25,8 @@ namespace TootTallySettings
         public bool IsConfigInitialized { get; set; }
         public string Name { get => "TootTally Settings"; set => Name = value; }
 
-        public static TootTallySettingPage ModulesSettingPage;
-        public static TootTallySettingPage MainTootTallySettingPage;
+        public static ITootTallySettingPage ModulesSettingPage;
+        public static ITootTallySettingPage MainTootTallySettingPage;
 
         public static void LogInfo(string msg) => Instance.Logger.LogInfo(msg);
         public static void LogError(string msg) => Instance.Logger.LogError(msg);
@@ -42,8 +43,10 @@ namespace TootTallySettings
         private void TryInitialize()
         {
             // Bind to the TTModules Config for TootTally
+            var settingsAPI = new TootTallySettingsAPI();
+            TootTallySettingsManager.RegisterAPI(settingsAPI);
             ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "<insert module description here>");
-            MainTootTallySettingPage = TootTallySettingsManager.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
+            MainTootTallySettingPage = TootTallySettingsManager.API.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
 
             var path = Path.Combine(Paths.BepInExRootPath, "Themes");
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
@@ -62,12 +65,12 @@ namespace TootTallySettings
         public void LoadModule()
         {
             AssetManager.LoadAssets(Path.Combine(Path.GetDirectoryName(Instance.Info.Location), "Assets"));
-            _harmony.PatchAll(typeof(TootTallySettingsManager));
+            _harmony.PatchAll(typeof(TootTallySettingsModule));
         }
 
         public void AddModuleToSettingPage(ITootTallyModule module)
         {
-            ModulesSettingPage ??= TootTallySettingsManager.AddNewPage("Enable / Disable Modules", "TTModules", 40f, new Color(0, 0, 0, 0));
+            ModulesSettingPage ??= TootTallySettingsManager.API.AddNewPage("Enable / Disable Modules", "TTModules", 40f, new Color(0, 0, 0, 0));
             ModulesSettingPage.AddToggle(module.Name, module.ModuleConfigEnabled);
         }
 

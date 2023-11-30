@@ -22,7 +22,7 @@ namespace TootTallySettings.TootTallySettingsObjects
             _text = text;
             _length = length;
             _config = config;
-            if (TootTallySettingsManager.isInitialized)
+            if (TootTallySettingsModule.isInitialized)
                 Initialize();
         }
 

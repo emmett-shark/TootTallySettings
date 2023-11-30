@@ -151,7 +151,7 @@ namespace TootTallySettings
             gridLayoutGroup.childAlignment = TextAnchor.UpperCenter;
             gridLayoutGroup.cellSize = new Vector2(400, 85);
 
-            GameObjectFactory.CreateCustomButton(panel.transform, new Vector2(-50, -66), new Vector2(250, 80), "Back", "TTSettingsBackButton", TootTallySettingsManager.OnBackButtonClick);
+            GameObjectFactory.CreateCustomButton(panel.transform, new Vector2(-50, -66), new Vector2(250, 80), "Back", "TTSettingsBackButton", TootTallySettingsModule.OnBackButtonClick);
 
             return panel;
         }

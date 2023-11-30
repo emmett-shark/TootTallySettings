@@ -19,7 +19,7 @@ namespace TootTallySettings.TootTallySettingsObjects
             _text = text;
             _description = description;
             _onClick = onClick;
-            if (TootTallySettingsManager.isInitialized)
+            if (TootTallySettingsModule.isInitialized)
                 Initialize();
         }
 

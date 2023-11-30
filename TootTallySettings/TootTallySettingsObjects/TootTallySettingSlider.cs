@@ -24,7 +24,7 @@ namespace TootTallySettings.TootTallySettingsObjects
             _text = text;
             _config = config;
             _integerOnly = integerOnly;
-            if (TootTallySettingsManager.isInitialized)
+            if (TootTallySettingsModule.isInitialized)
                 Initialize();
         }
 

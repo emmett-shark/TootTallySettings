@@ -1,16 +1,14 @@
 ﻿using HarmonyLib;
-using System.Collections.Generic;
-using TootTallySettings;
 using TootTallyCore.Graphics;
 using TootTallyCore.Graphics.Animations;
+using TootTallyCore.Settings;
 using TootTallyCore.Utils.Assets;
 using UnityEngine;
 using UnityEngine.UI;
-using TootTallyCore.Utils.TootTallyModules;
 
 namespace TootTallySettings
 {
-    public static class TootTallySettingsManager
+    public static class TootTallySettingsModule
     {
         private const string MAIN_MENU_PATH = "MainCanvas/MainMenu";
         public static bool isInitialized;
@@ -19,8 +17,7 @@ namespace TootTallySettings
 
         private static GameObject _mainMenu, _mainSettingPanel, _settingPanelGridHolder;
         public static Transform GetSettingPanelGridHolderTransform { get => _settingPanelGridHolder.transform; }
-        
-        private static List<TootTallySettingPage> _settingPageList = new List<TootTallySettingPage>();
+
         private static TootTallySettingPage _currentActivePage;
 
 
@@ -57,7 +54,7 @@ namespace TootTallySettings
             _settingPanelGridHolder = _mainSettingPanel.transform.Find("SettingsPanelGridHolder").gameObject;
             ShowMainSettingPanel();
 
-            _settingPageList.ForEach(page => page.Initialize());
+            TootTallySettingsManager.API.SettingPages.ForEach(page => page.Initialize());
             isInitialized = true;
         }
 
@@ -81,56 +78,12 @@ namespace TootTallySettings
                 ReturnToMainMenu();
         }
 
-        public static TootTallySettingPage AddNewPage(string pageName, string headerText, float elementSpacing, Color bgColor) =>
-        AddNewPage(pageName, headerText, elementSpacing, bgColor, GetDefaultColorBlock);
-
-        public static TootTallySettingPage AddNewPage(string pageName, string headerText, float elementSpacing, Color bgColor, ColorBlock btnColor)
-        {
-            var page = GetSettingPageByName(pageName);
-            if (page != null)
-            {
-                Plugin.LogInfo($"Page {pageName} already exist.");
-                return page;
-            }
-
-            page = new TootTallySettingPage(pageName, headerText, elementSpacing, bgColor, btnColor);
-            page.OnPageAdd();
-            _settingPageList.Add(page);
-
-            return page;
-        }
-
-        public static TootTallySettingPage AddNewPage(TootTallySettingPage settingPage)
-        {
-            var page = GetSettingPageByName(settingPage.name);
-            if (page != null)
-            {
-                Plugin.LogInfo($"Page {page.name} already exist.");
-                return page;
-            }
-
-            page = settingPage;
-            page.OnPageAdd();
-            _settingPageList.Add(page);
-
-            return page;
-        }
-
         public static void SwitchActivePage(TootTallySettingPage page)
         {
             _currentActivePage?.Hide();
             _currentActivePage = page;
             HideMainSettingPanel();
             page.Show();
-        }
-
-        public static void RemovePage(TootTallySettingPage page)
-        {
-            page.OnPageRemove();
-            if (_settingPageList.Contains(page))
-                _settingPageList.Remove(page);
-            else
-                Plugin.LogInfo($"Page {page.name} couldn't be found.");
         }
 
         public static void ShowMainSettingPanel()
@@ -148,18 +101,5 @@ namespace TootTallySettings
             _currentInstance.tryToSaveSettings();
             TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, Vector2.zero, 1.5f, new SecondDegreeDynamicsAnimation(1.75f, 1f, 0f));
         }
-
-        public static TootTallySettingPage GetSettingPageByName(string name) => _settingPageList?.Find(page => page.name == name);
-
-        private static ColorBlock GetDefaultColorBlock =>
-            new ColorBlock()
-            {
-                normalColor = new Color(.95f, .21f, .35f),
-                highlightedColor = new Color(.77f, .17f, .28f),
-                pressedColor = new Color(1,1,0),
-                selectedColor = new Color(.95f, .21f, .35f),
-                fadeDuration = .08f,
-                colorMultiplier = 1
-            };
     }
 }

@@ -25,7 +25,7 @@ namespace TootTallySettings.TootTallySettingsObjects
             _fontSize = fontSize;
             _isPassword = isPassword;
             this.onEditEnd = onEditEnd;
-            if (TootTallySettingsManager.isInitialized)
+            if (TootTallySettingsModule.isInitialized)
                 Initialize();
         }
 
