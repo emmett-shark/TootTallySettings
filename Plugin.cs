@@ -3,6 +3,7 @@ using BaboonAPI.Hooks.Initializer;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using Steamworks;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -62,6 +63,9 @@ namespace TootTallySettings
         public void LoadModule()
         {
             AssetManager.LoadAssets(Path.Combine(Path.GetDirectoryName(Instance.Info.Location), "Assets"));
+            MainTootTallySettingPage.AddImageToPageButton("icon.png");
+            ModulesSettingPage?.AddImageToPageButton("TTSettings.png");
+
             _harmony.PatchAll(typeof(TootTallySettingsManager));
         }
 

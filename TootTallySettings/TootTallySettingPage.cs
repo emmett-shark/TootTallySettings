@@ -10,6 +10,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using Rewired.Data;
+using System.Security.Policy;
+using TootTallyCore.Utils.Assets;
+using System.ComponentModel;
 
 namespace TootTallySettings
 {
@@ -62,6 +65,9 @@ namespace TootTallySettings
             _pageButton = GameObjectFactory.CreateCustomButton(TootTallySettingsManager.GetSettingPanelGridHolderTransform, Vector2.zero, new Vector2(250, 60), name, $"Open{name}Button", () => TootTallySettingsManager.SwitchActivePage(this));
             if (_btnColors != null)
                 _pageButton.button.colors = _btnColors;
+            if (_extraImage != null)
+                AddImageToPageButton(_extraImage);
+
             _settingObjectList.ForEach(obj =>
             {
                 try
@@ -76,6 +82,21 @@ namespace TootTallySettings
                 }
             });
             _isInitialized = true;
+        }
+
+        private string _extraImage;
+
+        public void AddImageToPageButton(string spriteName)
+        {
+            if (_pageButton != null)
+            {
+                var image = GameObjectFactory.CreateImageHolder(_pageButton.transform, Vector2.zero, Vector2.one * 78f, AssetManager.GetSprite(spriteName), $"{name}PageIcon");
+                var rect = image.GetComponent<RectTransform>();
+                rect.anchorMax = rect.anchorMin = new Vector2(.15f, .5f);
+                _pageButton.transform.GetChild(0).GetComponent<RectTransform>().anchorMin = new Vector2(.2f, 0);
+            }
+            else
+                _extraImage = spriteName;
         }
 
         public virtual void OnPageAdd() { }
