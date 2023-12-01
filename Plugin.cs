@@ -64,7 +64,7 @@ namespace TootTallySettings
         {
             AssetManager.LoadAssets(Path.Combine(Path.GetDirectoryName(Instance.Info.Location), "Assets"));
             MainTootTallySettingPage.AddImageToPageButton("icon.png");
-            ModulesSettingPage?.AddImageToPageButton("TTSettings.png");
+            TryAddThunderstoreIconToPageButton(Instance.Info.Location, Name, ModulesSettingPage);
             _harmony.PatchAll(typeof(TootTallySettingsManager));
         }
 

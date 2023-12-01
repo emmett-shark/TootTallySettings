@@ -35,10 +35,12 @@ namespace TootTallySettings
             GameObject mainCanvas = GameObject.Find("MainCanvas");
             _mainMenu = mainCanvas.transform.Find("MainMenu").gameObject;
 
-            var btn = GameObjectFactory.CreateCustomButton(_mainMenu.transform, new Vector2(-1661, -456), new Vector2(164, 164), AssetManager.GetSprite("icon.png"), false, "TTSettingsOpenButton", delegate
+            var btn = GameObjectFactory.CreateCustomButton(_mainMenu.transform, new Vector2(-1661, -456), new Vector2(164, 164), "Mod\nSettings", "TTSettingsOpenButton", delegate
             {
                 TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, new Vector2(1940, 0), 1.5f, new SecondDegreeDynamicsAnimation(1.75f, 1f, 0f));
             });
+            btn.textHolder.color = Color.yellow;
+            btn.textHolder.fontSize = 26;
             btn.GetComponent<Image>().sprite = AssetManager.GetSprite("PfpMask.png");
             btn.GetComponent<Image>().color = Color.black;
             btn.button.colors = new ColorBlock()
