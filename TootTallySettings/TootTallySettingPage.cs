@@ -99,6 +99,17 @@ namespace TootTallySettings
                 _extraImage = spriteName;
         }
 
+        public void AddImageToPageButton(Sprite sprite)
+        {
+            if (_pageButton != null)
+            {
+                var image = GameObjectFactory.CreateImageHolder(_pageButton.transform, Vector2.zero, Vector2.one * 78f, sprite, $"{name}PageIcon");
+                var rect = image.GetComponent<RectTransform>();
+                rect.anchorMax = rect.anchorMin = new Vector2(.15f, .5f);
+                _pageButton.transform.GetChild(0).GetComponent<RectTransform>().anchorMin = new Vector2(.2f, 0);
+            }
+        }
+
         public virtual void OnPageAdd() { }
 
         public void OnPageRemove()
