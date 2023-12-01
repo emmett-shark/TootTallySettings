@@ -82,7 +82,7 @@ namespace TootTallySettings
             if (File.Exists(iconPath))
                 AssetManager.LoadSingleAsset(iconPath, $"{moduleName}.png", delegate { page.AddImageToPageButton($"{moduleName}.png"); });
             else
-                Plugin.LogError("Couldn't find plugin icon image.");
+                Plugin.LogError($"Couldn't find {moduleName} icon image.");
         }
 
         public void UnloadModule()
