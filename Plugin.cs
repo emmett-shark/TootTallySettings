@@ -3,7 +3,6 @@ using BaboonAPI.Hooks.Initializer;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
-using Steamworks;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +18,7 @@ namespace TootTallySettings
     public class Plugin : BaseUnityPlugin, ITootTallyModule
     {
         public static Plugin Instance;
+
         private static Harmony _harmony;
 
         public ConfigEntry<bool> ModuleConfigEnabled { get; set; }
@@ -65,7 +65,6 @@ namespace TootTallySettings
             AssetManager.LoadAssets(Path.Combine(Path.GetDirectoryName(Instance.Info.Location), "Assets"));
             MainTootTallySettingPage.AddImageToPageButton("icon.png");
             ModulesSettingPage?.AddImageToPageButton("TTSettings.png");
-
             _harmony.PatchAll(typeof(TootTallySettingsManager));
         }
 
@@ -73,6 +72,17 @@ namespace TootTallySettings
         {
             ModulesSettingPage ??= TootTallySettingsManager.AddNewPage("Enable / Disable Modules", "TTModules", 40f, new Color(0, 0, 0, 0));
             ModulesSettingPage.AddToggle(module.Name, module.ModuleConfigEnabled);
+        }
+
+        public static void TryAddThunderstoreIconToPageButton(string pluginLocation, string moduleName, TootTallySettingPage page)
+        {
+            var iconPath = Path.Combine(Path.GetDirectoryName(pluginLocation), "icon.png");
+            if (!File.Exists(iconPath))
+                iconPath = Path.Combine(Path.GetDirectoryName(pluginLocation), "../icon.png");
+            if (File.Exists(iconPath))
+                AssetManager.LoadSingleAsset(iconPath, $"{moduleName}.png", delegate { page.AddImageToPageButton($"{moduleName}.png"); });
+            else
+                Plugin.LogError("Couldn't find plugin icon image.");
         }
 
         public void UnloadModule()
