@@ -216,7 +216,14 @@ namespace TootTallySettings
             RectTransform rect = toggle.GetComponent<RectTransform>();
             rect.pivot = Vector3.zero;
             rect.anchoredPosition = Vector3.zero;
-            rect.sizeDelta = size;
+
+            var label = GameObjectFactory.CreateSingleText(toggle.transform, $"{name}Label", text, Vector2.zero, new Vector2(250, 0), Color.white, GameObjectFactory.TextFont.Multicolore);
+            label.alignment = TextAlignmentOptions.Left;
+            label.fontStyle = FontStyles.Underline;
+            label.enableWordWrapping = false;
+            label.rectTransform.anchoredPosition = new Vector2(40, 0);
+            label.rectTransform.anchorMax = label.rectTransform.anchorMin = new Vector2(1, .5f);
+            label.fontSize = 28;
             toggle.name = name;
             if (config != null)
             {

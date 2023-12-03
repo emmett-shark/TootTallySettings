@@ -23,8 +23,6 @@ namespace TootTallySettings
         public static readonly float DEFAULT_HEADER_FONTSIZE = 40;
         public static readonly float DEFAULT_FONTSIZE = 20;
 
-        public bool isInitialized;
-
         public string name, headerName;
         public float elementSpacing;
         protected List<BaseTootTallySettingObject> _settingObjectList;
@@ -65,10 +63,11 @@ namespace TootTallySettings
             _pageButton = GameObjectFactory.CreateCustomButton(TootTallySettingsManager.GetSettingPanelGridHolderTransform, Vector2.zero, new Vector2(250, 60), name, $"Open{name}Button", () => TootTallySettingsManager.SwitchActivePage(this));
             if (_btnColors != null)
                 _pageButton.button.colors = _btnColors;
-            if (_extraImagePath != null)
-                AddImageToPageButton(_extraImagePath);
-            else if (_extraImage != null)
+
+            if (_extraImage != null)
                 AddImageToPageButton(_extraImage);
+            else if (_extraImagePath != null)
+                AddImageToPageButton(_extraImagePath);
 
             _settingObjectList.ForEach(obj =>
             {
@@ -91,19 +90,20 @@ namespace TootTallySettings
 
         public void AddImageToPageButton(string spriteName)
         {
+            _extraImagePath = spriteName;
             if (_pageButton != null)
             {
-                var image = GameObjectFactory.CreateImageHolder(_pageButton.transform, Vector2.zero, Vector2.one * 78f, AssetManager.GetSprite(spriteName), $"{name}PageIcon");
+                _extraImage = AssetManager.GetSprite(spriteName);
+                var image = GameObjectFactory.CreateImageHolder(_pageButton.transform, Vector2.zero, Vector2.one * 78f, _extraImage, $"{name}PageIcon");
                 var rect = image.GetComponent<RectTransform>();
                 rect.anchorMax = rect.anchorMin = new Vector2(.15f, .5f);
                 _pageButton.transform.GetChild(0).GetComponent<RectTransform>().anchorMin = new Vector2(.2f, 0);
             }
-            else
-                _extraImagePath = spriteName;
         }
 
         public void AddImageToPageButton(Sprite sprite)
         {
+            _extraImage = sprite;
             if (_pageButton != null)
             {
                 var image = GameObjectFactory.CreateImageHolder(_pageButton.transform, Vector2.zero, Vector2.one * 78f, sprite, $"{name}PageIcon");
@@ -111,8 +111,6 @@ namespace TootTallySettings
                 rect.anchorMax = rect.anchorMin = new Vector2(.15f, .5f);
                 _pageButton.transform.GetChild(0).GetComponent<RectTransform>().anchorMin = new Vector2(.2f, 0);
             }
-            else
-                _extraImage = sprite;
         }
 
         public virtual void OnPageAdd() { }
@@ -125,7 +123,7 @@ namespace TootTallySettings
                 obj.Remove();
             });
             GameObject.DestroyImmediate(_fullPanel);
-            GameObject.DestroyImmediate(_pageButton.gameObject);
+            _pageButton.gameObject.SetActive(false);
         }
 
         public void RemoveSettingObjectFromList(string name)
