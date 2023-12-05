@@ -28,9 +28,9 @@ namespace TootTallySettings.TootTallySettingsObjects
 
         public override void Initialize()
         {
-            sliderR = TootTallySettingObjectFactory.CreateSlider(_page.gridPanel.transform, name, 0, 1, false);
-            sliderG = TootTallySettingObjectFactory.CreateSlider(_page.gridPanel.transform, name, 0, 1, false);
-            sliderB = TootTallySettingObjectFactory.CreateSlider(_page.gridPanel.transform, name, 0, 1, false);
+            sliderR = TootTallySettingObjectFactory.CreateSlider(_page.gridPanel.transform, name, 0, 2, false);
+            sliderG = TootTallySettingObjectFactory.CreateSlider(_page.gridPanel.transform, name, 0, 2, false);
+            sliderB = TootTallySettingObjectFactory.CreateSlider(_page.gridPanel.transform, name, 0, 2, false);
 
             SetSlider(sliderR, _length, _config.Value.r, "Red", out labelR);
             SetSlider(sliderG, _length, _config.Value.g, "Green", out labelG);

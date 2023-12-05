@@ -22,6 +22,7 @@ namespace TootTallySettings
         public static readonly float DEFAULT_SLIDER_LENGTH = 250;
         public static readonly float DEFAULT_HEADER_FONTSIZE = 40;
         public static readonly float DEFAULT_FONTSIZE = 20;
+        public Action<TootTallySettingPage> OnShowEvent, OnHideEvent;
 
         public string name, headerName;
         public float elementSpacing;
@@ -181,7 +182,7 @@ namespace TootTallySettings
 
         public BaseTootTallySettingObject GetSettingObjectByName(string name) => _settingObjectList.Find(obj => obj.name == name);
 
-        public virtual void OnShow() { }
+        public virtual void OnShow() { OnShowEvent?.Invoke(this); }
 
         public void Show()
         {
@@ -197,7 +198,7 @@ namespace TootTallySettings
             _scrollableSliderHandler.enabled = gridPanel.GetComponent<RectTransform>().sizeDelta.y > -100f;
         }
 
-        public virtual void OnHide() { }
+        public virtual void OnHide() { OnHideEvent?.Invoke(this); }
 
         public void Hide()
         {

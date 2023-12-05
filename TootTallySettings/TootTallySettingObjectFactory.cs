@@ -83,6 +83,7 @@ namespace TootTallySettings
             Object.DontDestroyOnLoad(_sliderPrefab);
         }
 
+
         private static void SetTogglePrefab(HomeController __instance)
         {
             _togglePrefab = Object.Instantiate(__instance.set_tog_accessb_jumpscare);
