@@ -54,9 +54,9 @@ namespace TootTallySettings
             fileNames.AddRange(new string[] { "Day", "Night", "Random", "Default" });
             filePaths.ToList().ForEach(path => fileNames.Add(Path.GetFileNameWithoutExtension(path)));
             MainTootTallySettingPage.AddLabel("GameThemesLabel", "Game Theme", 24f, TMPro.FontStyles.Normal, TMPro.TextAlignmentOptions.BottomLeft);
-            MainTootTallySettingPage.AddDropdown("Themes", TootTallyCore.Plugin.Instance.ThemeName, fileNames.ToArray()); //Have to fix dropdown default value not working
+            MainTootTallySettingPage.AddDropdown("Themes", TootTallyCore.Plugin.Instance.ThemeName, fileNames.ToArray());
             MainTootTallySettingPage.AddButton("ResetThemeButton", new Vector2(350, 50), "Refresh Theme", ThemeManager.RefreshTheme);
-
+            ThemeManager.OnThemeRefreshEvents += TootTallySettingsManager.OnRefreshTheme;
             TootTallyModuleManager.AddModule(this);
         }
 

@@ -164,7 +164,9 @@ namespace TootTallySettings
             panel.name = $"TootTally{name}Panel";
             panel.GetComponent<Image>().color = bgColor;
 
-            panel.transform.Find("TootTallySettingsHeader").GetComponent<TMP_Text>().text = headerText;
+            var text = panel.transform.Find("TootTallySettingsHeader").GetComponent<TMP_Text>();
+            text.text = headerText;
+            text.color = Theme.colors.leaderboard.text;
 
             var gridPanel = panel.transform.Find("SettingsPanelGridHolder").gameObject;
             gridPanel.GetComponent<RectTransform>().pivot = new Vector2(0, 1);

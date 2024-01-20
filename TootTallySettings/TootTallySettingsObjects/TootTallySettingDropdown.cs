@@ -40,7 +40,10 @@ namespace TootTallySettings.TootTallySettingsObjects
         {
             dropdown.AddOptions(Enum.GetNames(_config.BoxedValue.GetType()).ToList());
             dropdown.value = dropdown.options.FindIndex(x => x.text == _config.BoxedValue.ToString());
-            dropdown.onValueChanged.AddListener(value => { _config.BoxedValue = Enum.Parse(_config.BoxedValue.GetType(), dropdown.options[value].text); });
+            dropdown.onValueChanged.AddListener(value =>
+            {
+                _config.BoxedValue = Enum.Parse(_config.BoxedValue.GetType(), dropdown.options[value].text);
+            });
         }
 
         public void ConfigureDropdownString()
@@ -51,7 +54,10 @@ namespace TootTallySettings.TootTallySettingsObjects
                 AddOptions(_config.BoxedValue.ToString());
 
             dropdown.value = dropdown.options.FindIndex(x => x.text == _config.BoxedValue.ToString());
-            dropdown.onValueChanged.AddListener(value => { _config.BoxedValue = dropdown.options[value].text; });
+            dropdown.onValueChanged.AddListener(value =>
+            { 
+                _config.BoxedValue = dropdown.options[value].text;
+            });
         }
 
         public void AddOptions(params string[] name)
@@ -68,6 +74,7 @@ namespace TootTallySettings.TootTallySettingsObjects
         public override void Initialize()
         {
             dropdown = TootTallySettingObjectFactory.CreateDropdown(_page.gridPanel.transform, name);
+            dropdown.navigation = new Navigation() { mode = Navigation.Mode.None };
             if (_config.BoxedValue.GetType() == typeof(string)) ConfigureDropdownString(); else ConfigureDropdownEnum();
             if (_config.Description.Description != null && _config.Description.Description.Length > 0)
             {

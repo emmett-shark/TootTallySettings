@@ -13,6 +13,7 @@ using Rewired.Data;
 using System.Security.Policy;
 using TootTallyCore.Utils.Assets;
 using System.ComponentModel;
+using TootTallyCore;
 
 namespace TootTallySettings
 {
@@ -52,9 +53,9 @@ namespace TootTallySettings
         {
             _fullPanel = TootTallySettingObjectFactory.CreateSettingPanel(GameObject.Find("MainCanvas").transform, name, headerName, elementSpacing, _bgColor);
 
-            _backButton = GameObjectFactory.CreateCustomButton(_fullPanel.transform, new Vector2(-1570, -66), new Vector2(250, 80), "Return", $"{name}ReturnButton", TootTallySettingsManager.OnBackButtonClick);
-
             gridPanel = _fullPanel.transform.Find("SettingsPanelGridHolder").gameObject;
+            
+            _backButton = GameObjectFactory.CreateCustomButton(_fullPanel.transform, new Vector2(-1570, -66), new Vector2(250, 80), "Return", $"{name}ReturnButton", TootTallySettingsManager.OnBackButtonClick);
 
             _verticalSlider = TootTallySettingObjectFactory.CreateVerticalSlider(_fullPanel.transform, $"{name}VerticalSlider", new Vector2(1700, -200), new Vector2(-1080, 20));
             _verticalSlider.onValueChanged.AddListener(delegate { OnSliderValueChangeScrollGridPanel(gridPanel, _verticalSlider.value); });
@@ -83,6 +84,7 @@ namespace TootTallySettings
                     Plugin.LogError(e.StackTrace);
                 }
             });
+
             _isInitialized = true;
         }
 
@@ -163,6 +165,13 @@ namespace TootTallySettings
 
             if (_isInitialized)
                 UpdateVerticalSlider();
+        }
+
+        public void RefreshTheme()
+        {
+            GameObject.Destroy(_fullPanel.gameObject);
+            GameObject.Destroy(_pageButton.gameObject);
+            Initialize();
         }
 
         public BaseTootTallySettingObject AddSettingObjectToList(BaseTootTallySettingObject settingObject)

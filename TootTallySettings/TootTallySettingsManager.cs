@@ -1,12 +1,12 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
-using TootTallySettings;
 using TootTallyCore.Graphics;
 using TootTallyCore.Graphics.Animations;
 using TootTallyCore.Utils.Assets;
 using UnityEngine;
 using UnityEngine.UI;
-using TootTallyCore.Utils.TootTallyModules;
+using TMPro;
+using TootTallyCore;
 
 namespace TootTallySettings
 {
@@ -18,6 +18,8 @@ namespace TootTallySettings
         private static HomeController _currentInstance;
 
         private static GameObject _mainMenu, _mainSettingPanel, _settingPanelGridHolder;
+
+        private static CustomButton _backButton;
         public static Transform GetSettingPanelGridHolderTransform { get => _settingPanelGridHolder.transform; }
 
         private static List<TootTallySettingPage> _settingPageList = new List<TootTallySettingPage>();
@@ -59,6 +61,8 @@ namespace TootTallySettings
             outline.effectColor = Color.yellow;
             outline.effectDistance = new Vector2(3, -3);
             _mainSettingPanel = TootTallySettingObjectFactory.CreateMainSettingPanel(_mainMenu.transform);
+            _backButton = GameObjectFactory.CreateCustomButton(_mainSettingPanel.transform, new Vector2(-50, -66), new Vector2(250, 80), "Back", "TTSettingsBackButton", OnBackButtonClick);
+            
 
             _settingPanelGridHolder = _mainSettingPanel.transform.Find("SettingsPanelGridHolder").gameObject;
             ShowMainSettingPanel();
@@ -154,6 +158,17 @@ namespace TootTallySettings
             _currentInstance.tryToSaveSettings();
             _currentAnim?.Dispose(); //Never too sure lmfao
             _currentAnim = TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, Vector2.zero, 1f, new SecondDegreeDynamicsAnimation(2.1f, .98f, 0f), sender => _mainSettingPanel.SetActive(false));
+        }
+
+        public static void OnRefreshTheme()
+        {
+            if (_settingPageList == null || !isInitialized) return;
+
+            _mainSettingPanel.transform.Find("TootTallySettingsHeader").GetComponent<TMP_Text>().color = Theme.colors.leaderboard.text;
+            GameObject.DestroyImmediate(_backButton.gameObject);
+            _backButton = GameObjectFactory.CreateCustomButton(_mainSettingPanel.transform, new Vector2(-50, -66), new Vector2(250, 80), "Back", "TTSettingsBackButton", OnBackButtonClick);
+            _settingPageList.ForEach(page => page.RefreshTheme());
+            _currentActivePage.Show();
         }
 
         public static TootTallySettingPage GetSettingPageByName(string name) => _settingPageList?.Find(page => page.name == name);
