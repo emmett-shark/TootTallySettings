@@ -76,7 +76,7 @@ namespace TootTallySettings.TootTallySettingsObjects
             handleText.rectTransform.sizeDelta = new Vector2(35, 0);
             handleText.fontSize = 10;
             s.value = value;
-            label = GameObjectFactory.CreateSingleText(s.transform, $"{s.name}Label", text, Color.white);
+            label = GameObjectFactory.CreateSingleText(s.transform, $"{s.name}Label", text);
             label.rectTransform.anchoredPosition = new Vector2(0, 35);
             label.alignment = TextAlignmentOptions.TopLeft;
         }

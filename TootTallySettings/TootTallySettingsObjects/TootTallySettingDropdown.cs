@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using TootTallyCore.Graphics;
@@ -12,14 +13,14 @@ namespace TootTallySettings.TootTallySettingsObjects
     {
         public Dropdown dropdown;
         public TMP_Text label;
-        private string[] _optionValues;
+        private List<string> _optionValues;
         private ConfigEntryBase _config;
         private BubblePopupHandler _bubble;
 
         public TootTallySettingDropdown(TootTallySettingPage page, string name, string text, ConfigEntry<string> config, string[] optionValues = null) : base(name, page)
         {
             _config = config;
-            _optionValues = optionValues;
+            _optionValues = optionValues.ToList();
             if (TootTallySettingsManager.isInitialized)
             {
                 Initialize();
@@ -45,7 +46,7 @@ namespace TootTallySettings.TootTallySettingsObjects
         public void ConfigureDropdownString()
         {
             if (_optionValues != null)
-                AddOptions(_optionValues);
+                AddOptions(_optionValues.ToArray());
             if (!_optionValues.Contains(_config.BoxedValue))
                 AddOptions(_config.BoxedValue.ToString());
 
@@ -56,7 +57,12 @@ namespace TootTallySettings.TootTallySettingsObjects
         public void AddOptions(params string[] name)
         {
             if (name.Length != 0)
-                dropdown.AddOptions(name.ToList());
+            {
+                if (dropdown != null)
+                    dropdown.AddOptions(name.ToList());
+                else
+                    _optionValues.AddRange(name);
+            }
         }
 
         public override void Initialize()

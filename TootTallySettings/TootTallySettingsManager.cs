@@ -19,9 +19,10 @@ namespace TootTallySettings
 
         private static GameObject _mainMenu, _mainSettingPanel, _settingPanelGridHolder;
         public static Transform GetSettingPanelGridHolderTransform { get => _settingPanelGridHolder.transform; }
-        
+
         private static List<TootTallySettingPage> _settingPageList = new List<TootTallySettingPage>();
         private static TootTallySettingPage _currentActivePage;
+        private static TootTallyAnimation _currentAnim;
 
 
         [HarmonyPatch(typeof(GameObjectFactory), nameof(GameObjectFactory.OnHomeControllerInitialize))]
@@ -37,7 +38,9 @@ namespace TootTallySettings
 
             var btn = GameObjectFactory.CreateCustomButton(_mainMenu.transform, new Vector2(-1661, -456), new Vector2(164, 164), "Mod\nSettings", "TTSettingsOpenButton", delegate
             {
-                TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, new Vector2(1940, 0), 1.5f, new SecondDegreeDynamicsAnimation(1.75f, 1f, 0f));
+                _mainSettingPanel.SetActive(true);
+                _currentAnim?.Dispose();
+                _currentAnim = TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, new Vector2(1940, 0), 1f, new SecondDegreeDynamicsAnimation(2.1f, .98f, 0f));
             });
             btn.textHolder.color = Color.yellow;
             btn.textHolder.fontSize = 26;
@@ -47,6 +50,7 @@ namespace TootTallySettings
             {
                 normalColor = Color.white,
                 pressedColor = Color.gray,
+                selectedColor = Color.white,
                 highlightedColor = new Color(.3f, .3f, 0),
                 colorMultiplier = 1f,
                 fadeDuration = 0.2f
@@ -148,7 +152,8 @@ namespace TootTallySettings
         public static void ReturnToMainMenu()
         {
             _currentInstance.tryToSaveSettings();
-            TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, Vector2.zero, 1.5f, new SecondDegreeDynamicsAnimation(1.75f, 1f, 0f));
+            _currentAnim?.Dispose(); //Never too sure lmfao
+            _currentAnim = TootTallyAnimationManager.AddNewPositionAnimation(_mainMenu, Vector2.zero, 1f, new SecondDegreeDynamicsAnimation(2.1f, .98f, 0f), sender => _mainSettingPanel.SetActive(false));
         }
 
         public static TootTallySettingPage GetSettingPageByName(string name) => _settingPageList?.Find(page => page.name == name);
@@ -158,7 +163,7 @@ namespace TootTallySettings
             {
                 normalColor = new Color(.95f, .21f, .35f),
                 highlightedColor = new Color(.77f, .17f, .28f),
-                pressedColor = new Color(1,1,0),
+                pressedColor = new Color(1, 1, 0),
                 selectedColor = new Color(.95f, .21f, .35f),
                 fadeDuration = .08f,
                 colorMultiplier = 1

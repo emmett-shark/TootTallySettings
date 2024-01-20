@@ -45,7 +45,7 @@ namespace TootTallySettings.TootTallySettingsObjects
             handleText.fontSize = 10;
             slider.onValueChanged.AddListener((value) => { handleText.text = SliderValueToText(value); _config.Value = value; });
             slider.value = _config.Value;
-            label = GameObjectFactory.CreateSingleText(slider.transform, $"{name}Label", _text, Color.white);
+            label = GameObjectFactory.CreateSingleText(slider.transform, $"{name}Label", _text);
             label.rectTransform.anchoredPosition = new Vector2(0, 35);
             label.alignment = TextAlignmentOptions.TopLeft;
             base.Initialize();

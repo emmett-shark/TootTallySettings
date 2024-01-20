@@ -23,7 +23,7 @@ namespace TootTallySettings.TootTallySettingsObjects
         }
         public override void Initialize()
         {
-            label = GameObjectFactory.CreateSingleText(_page.gridPanel.transform, name, _text, Color.white);
+            label = GameObjectFactory.CreateSingleText(_page.gridPanel.transform, name, _text);
             label.rectTransform.anchoredPosition = Vector2.zero;
             label.rectTransform.pivot = Vector2.one / 2f;
             label.rectTransform.sizeDelta = new Vector2(0, _fontSize + 10);

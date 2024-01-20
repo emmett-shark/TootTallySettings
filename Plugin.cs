@@ -43,7 +43,7 @@ namespace TootTallySettings
         private void TryInitialize()
         {
             // Bind to the TTModules Config for TootTally
-            ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "<insert module description here>");
+            ModuleConfigEnabled = TootTallyCore.Plugin.Instance.Config.Bind("Modules", "TootTallySettings", true, "TootTally Setting Panel for mods");
             MainTootTallySettingPage = TootTallySettingsManager.AddNewPage("TootTally", "TootTally", 40f, new Color(.1f, .1f, .1f, .3f));
 
             var path = Path.Combine(Paths.BepInExRootPath, "Themes");

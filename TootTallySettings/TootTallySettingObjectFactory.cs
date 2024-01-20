@@ -1,5 +1,6 @@
 ﻿using BepInEx.Configuration;
 using TMPro;
+using TootTallyCore;
 using TootTallyCore.Graphics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -52,7 +53,7 @@ namespace TootTallySettings
             var contentSizeFitter = settingPanelGridHolder.AddComponent<ContentSizeFitter>(); //To set the rectTransform.size dynamically
             contentSizeFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            var headerText = GameObjectFactory.CreateSingleText(mainPanel.transform, "TootTallySettingsHeader", "TootTally Settings (BETA)", Color.white);
+            var headerText = GameObjectFactory.CreateSingleText(mainPanel.transform, "TootTallySettingsHeader", "TootTally Settings");
             headerText.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 475);
             headerText.fontSize = 72;
             headerText.fontStyle = FontStyles.Bold | FontStyles.UpperCase;
@@ -71,7 +72,7 @@ namespace TootTallySettings
             _sliderPrefab = Object.Instantiate(__instance.fullsettingspanel.transform.Find("Settings/AUDIO/master_volume/SET_sld_volume").GetComponent<Slider>());
             _sliderPrefab.name = "TootTallySettingsSliderPrefab";
             var handle = _sliderPrefab.transform.Find("Handle Slide Area/Handle");
-            var scrollSpeedSliderText = GameObjectFactory.CreateSingleText(handle, "SliderHandleText", "1", Color.white);
+            var scrollSpeedSliderText = GameObjectFactory.CreateSingleText(handle, "SliderHandleText", "1");
             scrollSpeedSliderText.text = "50";
 
             _sliderPrefab.onValueChanged = new Slider.SliderEvent();
@@ -130,7 +131,7 @@ namespace TootTallySettings
             rectText.anchoredPosition = rectText.anchorMin = rectText.anchorMax = rectText.pivot = Vector2.zero;
             rectText.sizeDelta = new Vector2(350, 50);
 
-            _inputFieldPrefab.textComponent = GameObjectFactory.CreateSingleText(inputTextHolder.transform, $"TextLabel", "", Color.white);
+            _inputFieldPrefab.textComponent = GameObjectFactory.CreateSingleText(inputTextHolder.transform, $"TextLabel", "");
             _inputFieldPrefab.textComponent.rectTransform.pivot = new Vector2(0, 0.5f);
             _inputFieldPrefab.textComponent.alignment = TextAlignmentOptions.Left;
             _inputFieldPrefab.textComponent.margin = new Vector4(5, 0, 0, 0);
@@ -218,7 +219,7 @@ namespace TootTallySettings
             rect.pivot = Vector3.zero;
             rect.anchoredPosition = Vector3.zero;
 
-            var label = GameObjectFactory.CreateSingleText(toggle.transform, $"{name}Label", text, Vector2.zero, new Vector2(250, 0), Color.white, GameObjectFactory.TextFont.Multicolore);
+            var label = GameObjectFactory.CreateSingleText(toggle.transform, $"{name}Label", text, Vector2.zero, new Vector2(250, 0), Theme.colors.leaderboard.text, GameObjectFactory.TextFont.Multicolore);
             label.alignment = TextAlignmentOptions.Left;
             label.fontStyle = FontStyles.Underline;
             label.enableWordWrapping = false;
