@@ -203,8 +203,8 @@ namespace TootTallySettings
         private void UpdateVerticalSlider()
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(gridPanel.GetComponent<RectTransform>());
-            _verticalSlider.gameObject.SetActive(gridPanel.GetComponent<RectTransform>().sizeDelta.y > -100f);
-            _scrollableSliderHandler.enabled = gridPanel.GetComponent<RectTransform>().sizeDelta.y > -100f;
+            _verticalSlider.gameObject.SetActive(gridPanel.GetComponent<RectTransform>().sizeDelta.y > -120f);
+            _scrollableSliderHandler.enabled = gridPanel.GetComponent<RectTransform>().sizeDelta.y > -120f;
         }
 
         public virtual void OnHide() { OnHideEvent?.Invoke(this); }
