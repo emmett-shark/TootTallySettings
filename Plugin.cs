@@ -1,5 +1,4 @@
-﻿using BaboonAPI.Hooks.Entrypoints;
-using BaboonAPI.Hooks.Initializer;
+﻿using BaboonAPI.Hooks.Initializer;
 using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
@@ -56,6 +55,7 @@ namespace TootTallySettings
             MainTootTallySettingPage.AddLabel("GameThemesLabel", "Game Theme", 24f, TMPro.FontStyles.Normal, TMPro.TextAlignmentOptions.BottomLeft);
             MainTootTallySettingPage.AddDropdown("Themes", TootTallyCore.Plugin.Instance.ThemeName, fileNames.ToArray());
             MainTootTallySettingPage.AddButton("ResetThemeButton", new Vector2(350, 50), "Refresh Theme", ThemeManager.RefreshTheme);
+            MainTootTallySettingPage.AddToggle("Change pitch speed", TootTallyCore.Plugin.Instance.ChangePitch);
             MainTootTallySettingPage.AddToggle("Run GC While Playing", TootTallyCore.Plugin.Instance.RunGCWhilePlaying);
             ThemeManager.OnThemeRefreshEvents += TootTallySettingsManager.OnRefreshTheme;
             TootTallyModuleManager.AddModule(this);
